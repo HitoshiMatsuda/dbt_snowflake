@@ -25,7 +25,7 @@ snowflakeとdbtを連携するHandsonを実施
 * githubでLogin認証を行う
 
 ## 参考資料
-[Handson](https://dev.classmethod.jp/articles/accelerating-data-teams-with-dbt-and-snowflake-part1/)
+[Handson](https://dev.classmethod.jp/articles/accelerating-data-teams-with-dbt-and-snowflake-part1/). 
 [dbt_directory_参考資料](https://qiita.com/Ayumu-y/items/62eae09affba5b9a4f71)
 
 ## dbt
