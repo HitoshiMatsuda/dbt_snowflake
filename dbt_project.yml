@@ -37,9 +37,12 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   snowflake_workshop:
+    # 実行対象のディレクトリ
+    example:
+          schema: develop
     staging:
-      materialized: view
-      snowflake_warehouse: PC_DBT_WH
+        schema: staging
+        materialized: view
     marts:
-      materialized: table
-      snowflake_warehouse: PC_DBT_WH
+        schema: marts
+        materialized: table
