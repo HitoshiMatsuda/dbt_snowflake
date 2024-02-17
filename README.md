@@ -26,9 +26,10 @@ Handsonの対象は参考資料に記載したものである
 #### dbt login情報
 * githubでLogin認証を行う
 
-## 参考資料
+#### 参考資料
 [Handson](https://dev.classmethod.jp/articles/accelerating-data-teams-with-dbt-and-snowflake-part1/). 
 [dbt_directory_参考資料](https://qiita.com/Ayumu-y/items/62eae09affba5b9a4f71)
+
 
 ## dbt memo
 * マクロは**Jinja**というPythonベースのテンプレート言語で書かれている
@@ -37,20 +38,27 @@ Handsonの対象は参考資料に記載したものである
 * marts フォルダー内のすべてのモデルをテーブルとして実体化
 	`marts → table`
 
-
-##### schema名について
+#### schema名について
 ```
 generate_schema_name.sqlのマクロを自身で作成しなくても、dbt_project.ymlで各modelに対してschemaパラメータが定義されていれば、デフォルトのスキーマ名の末尾にdbt_project.ymlのschemaパラメータで定義した内容が追加される
 ```
 
-##### dbt実行タスクへのタグ付
+#### dbt実行タスクへのタグ付
 macros/query_tag.sqlにて定義(サンプルデータのまま使用)
 
-#### Stagingについて
+#### Stagingについて : L0 → L1
 stagingディレクトリにはソースデータから、一次集計を行うためのコードが書かれたmodelを格納する。  
-    ┗ snowflakeのDB単位でmodelを作成する
-* 推奨. 
-    データを抽出してくるシステムに応じて、サブディレクトリを作成する。上記のドキュメントから引用したディレクトリ構成では、juffle_shop、Stripeという、２つの異なるシステム毎にディレクトリを分けている。
-* 非推奨. 
-    データのロード方法（Fivetran、Stitchなど）で、サブディレクトリを分ける。  
-    「マーケティング」「ファイナンス」などビジネス上のジャンルで、サブディレクトリを分ける。
+
+##### Stagingディレクトリのmodelで行う主な処理
+* リネーム
+* 型変換
+* 基本的な計算（セントからドルに単位を変換する。など）
+* カテゴライズ（case文で、値をグループ分けする。など）
+
+#### intermediateについて : L1 → L2
+Staging modelで作成したテーブルを、グループ化して異なる粒度で集計する   
+intermediateモデルの目的は、martsモデルの複雑さを解消すること
+
+#### martsについて : L2を出力
+データマートを生成するためのmodelを作成
+

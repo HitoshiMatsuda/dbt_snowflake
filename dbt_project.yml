@@ -41,7 +41,7 @@ models:
     example:
         schema: develop
     staging:
-        schema: staging_dbt_project_yml
+        schema: tpch
         materialized: view
         snowflake_warehouse: pc_dbt_wh
     marts:
