@@ -39,10 +39,12 @@ models:
   snowflake_workshop:
     # 実行対象のディレクトリ
     example:
-          schema: develop
+        schema: develop
     staging:
-        schema: staging
+        schema: staging_dbt_project_yml
         materialized: view
+        snowflake_warehouse: pc_dbt_wh
     marts:
-        schema: marts
+        schema: marts_dbt_project_yml
         materialized: table
+        snowflake_warehouse: pc_dbt_wh
