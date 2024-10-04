@@ -19,7 +19,7 @@ with
                 from customers_payments_employees_source as emp_amo
                 left join offices_source as offi on emp_amo.officecode = offi.officecode
             )
-        group by officecode
+        group by officecode,country
         order by amount desc
     )
 
