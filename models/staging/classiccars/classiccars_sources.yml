@@ -1,0 +1,44 @@
+version: 2
+sources:
+  - name: classiccars
+    description: 中古車販売データスキーマのrawデータ
+    database: DBT_DB
+    schema: CLASSICCARS
+    tables:
+      # 支店テーブルへの前処理を設定する
+      - name: OFFICES
+        description: 中古車販売会社の支店情報テーブル        
+        columns:
+          - name: OFFICECODE
+            description: 支店番号
+            # データテストを設定可能
+            tests: 
+              - unique
+              - my_not_null
+
+      - name: CUSTOMERS
+        description: 中古車販売会社の顧客情報テーブル
+        columns:
+          - name: CUSTOMERNUMBER
+            description: 顧客番号
+            tests:
+              - unique
+              - my_not_null
+
+      - name: EMPLOYEES
+        description: 中古車販売会社の従業員情報テーブル
+        columns:
+          - name: EMPLOYEENUMBER
+            description: 従業員番号
+            tests:
+              - unique
+              - my_not_null
+
+      - name: PAYMENTS
+        description: 中古車販売会社の支払い情報テーブル
+        columns:
+          - name: CHECKNUMBER
+            description: 支払い番号
+            tests:
+              - unique
+              - my_not_null
