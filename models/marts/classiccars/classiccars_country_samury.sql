@@ -15,4 +15,5 @@ with
         left join trans_lang t2 on t1.country = t2.eng_name
     )
 
-selecct * from join_table
+select *
+from join_table
