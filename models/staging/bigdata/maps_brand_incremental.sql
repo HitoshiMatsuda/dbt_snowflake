@@ -1,7 +1,6 @@
 {{
     config(
         materialized='incremental',
-        -- unique_keyで設定したカラムを使用して個々のレコードに更新がかかっているか確認する
         unique_key='brand_id'
     )
 }}
