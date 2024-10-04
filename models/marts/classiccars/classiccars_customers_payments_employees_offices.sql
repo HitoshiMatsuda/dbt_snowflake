@@ -12,10 +12,10 @@ with
     ),
 
     agg_cus_pay_emp as (
-        select officecode, sum(amount) as amount
+        select officecode, sum(amount) as amount, country
         from
             (
-                select offi.officecode as officecode, emp_amo.amount as amount
+                select offi.officecode as officecode, emp_amo.amount as amount, offi.COUNTRY as country
                 from customers_payments_employees_source as emp_amo
                 left join offices_source as offi on emp_amo.officecode = offi.officecode
             )
