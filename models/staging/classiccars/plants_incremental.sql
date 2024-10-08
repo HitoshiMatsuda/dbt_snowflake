@@ -1,13 +1,13 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id'
+        unique_key='code'
     )
 }}
 
 with source as (
 
-    select * from {{ ref('trans_jp') }}
+    select * from {{ ref('plants') }}
 
 )
 
