@@ -114,7 +114,9 @@ dbtのデータモデリングを理解するために、階層構造を理解�
                tests: 
                - unique
                - not_null
-   ```
+   ```  
+   ![test-error](images/customer_test_error.png)
+
    
 3. Genericテスト(カスタム)
    標準のGenericテストでは不足する場合、自作のGenericテストを作成可能  
@@ -215,6 +217,13 @@ target配下にある３つのファイルを好きなサーバで公開する�
 
    {% endif %}
 ```
+
+## 8.スナップショット機能
+スナップショットはデータの復元機能のことです。  
+dbt では 「SCD(Slowly Change Dimensions) の Type-2」   
+簡単に言うと「データの変化があった行を UPDATE するのではなく、 INSERT で追記し、その行有効な時間を示す列を追加する」ことで実現しています。
+
+
 
 ## 10.
 **coreとcloudの大きな差分は「ジョブスケジューラの有無」**  
