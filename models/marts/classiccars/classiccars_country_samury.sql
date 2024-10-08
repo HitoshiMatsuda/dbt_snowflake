@@ -4,7 +4,7 @@ with
     ),
 
     source_mart as (
-        {{ config(schema="_classiccars_L2") }}
+        {{ config(schema="classiccars_L2") }}
         select *
         from {{ ref("classiccars_customers_payments_employees_offices") }}
     ),
