@@ -1,13 +1,13 @@
 {{
     config(
         materialized='incremental',
-        unique_key='brand_id'
+        unique_key='id'
     )
 }}
 
 with source as (
 
-    select * from {{ ref('maps_brand') }}
+    select * from {{ ref('trans_jp') }}
 
 )
 

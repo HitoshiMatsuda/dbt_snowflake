@@ -1,6 +1,6 @@
 with
     source as (
-        {{ config(schema="_classiccars_L1") }}
+        {{ config(schema="classiccars_L1") }}
         select *
         from {{ source("classiccars", "PAYMENTS") }}
     ),
