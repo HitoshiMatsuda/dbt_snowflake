@@ -160,6 +160,8 @@ dbtのデータモデリングを理解するために、階層構造を理解�
                - my_not_null←これ
    ```
 
+※補足  
+`dbt debug`で接続テストも可能
 
 
 ## 5.ドキュメント
@@ -219,10 +221,39 @@ target配下にある３つのファイルを好きなサーバで公開する�
 ```
 
 ## 8.スナップショット機能
-スナップショットはデータの復元機能のことです。  
-dbt では 「SCD(Slowly Change Dimensions) の Type-2」   
+スナップショットはデータの復元機能のことです。   
+SCD Type2 Dimensionという思想に従って、過去時点の状態の遷移を蓄積できるような仕組みです。   
 簡単に言うと「データの変化があった行を UPDATE するのではなく、 INSERT で追記し、その行有効な時間を示す列を追加する」ことで実現しています。
 
+`dbt snapshot`を実行すると下記カラムが自動生成されます。
+* `dbt_updated_at`：行が最初にスナップショットに挿入された時のソースデータの更新日時。
+* `dbt_valid_from`：行が最初にスナップショットに挿入された時の日時。
+* `dbt_valid_to`：行が無効になった日時。スナップショット作成一回目はNULLになる。
+* `dbt_scd_id`：スナップショットされたレコードに生成される一意なキー。
+
+
+```sql:sample.sql
+   {% snapshot daily_data_snapshot %}
+
+   {{
+   config(
+      target_database=[DB名]
+      target_schema=[Schema名],
+      unique_key=[主キー],
+      strategy='timestamp',
+      updated_at=[date型のカラム。ここに指定した列を最終更新日時として、既存テーブルと比較して更新された行をINSERTする],
+   )
+   }}
+
+   select
+      *
+   from
+      {{ source([Schema名], [テーブル名]) }}
+
+   {% endsnapshot %}
+```
+
+## 9.
 
 
 ## 10.
