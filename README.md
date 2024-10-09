@@ -12,7 +12,7 @@ dbtの特徴的な機能に関して下記構成に沿って検証した
 6. シード機能
 7. スナップショット機能
 8. dbt Packages
-9.  【おまけ】dbt cloudとdbt coreの違い
+9. 【おまけ】dbt cloudとdbt coreの違い
 10. 今回の検証で参考にしたドキュメント
 
 ## 1.dwhとの接続および権限設定
@@ -231,6 +231,13 @@ SCD Type2 Dimensionという思想に従って、過去時点の状態の遷移�
 * `dbt_valid_to`：行が無効になった日時。スナップショット作成一回目はNULLになる。
 * `dbt_scd_id`：スナップショットされたレコードに生成される一意なキー。
 
+スナップショットの config の strategy には2つの値を入れることが出来ます。  
+`timestamp` と `check` です。  
+`timestamp` はソースデータに最終更新日時を表す列がある場合に使うことができ、 `check` に比べると高速に実装されています。  
+通常は `timestamp` を使いましょう。  
+しかしテーブルによっては、最終更新日時を表す列がない場合があります。そのような場合に使えるのが `check` です。  
+これは、データが更新されたかどうかを指定した列を比較することで実装されているため、 `timestamp` と比べると低速です。  
+データ量が巨大な場合や、従量課金制のDWを使っている場合は、できるだけ `timestamp` を使えるよう、ソースデータへ最終更新日時の列を実装しましょう。  
 
 ```sql:sample.sql
    {% snapshot daily_data_snapshot %}
@@ -255,23 +262,32 @@ SCD Type2 Dimensionという思想に従って、過去時点の状態の遷移�
 
    ![snapshot](images/snapshot_sample.png)
 
+### ※データソースの物理削除への対応について
+dbt はデフォルトではソースデータから DELETE された行に対して何も行いません。
+しかし、何らかの事情、例えば個人情報保護の関係で削除しなければいけないなどの場合、ソースデータから削除されたデータをスナップショットからも削除したい場合があるでしょう。
+そのような場合、 config に invalidate_hard_deletes を足し、値を True に設定します。
+この設定を行うと、ソースデータから消えたらレコードはスナップショットからも削除されます。
+
+## 8.dbt Packages
 
 
-## 9.
-
-
-## 10.
+## 9.【おまけ】dbt cloudとdbt coreの違い
 **coreとcloudの大きな差分は「ジョブスケジューラの有無」**  
 core : オーケストレーションツールが必要  
 cloud : deploy機能でスケジューリング可能  
 
-**その他の差分**  
-1. クラウド統合開発環境(IDE)
-2. 
 
-## 12.その他
+1. クラウド統合開発環境(IDE)
+2. ジョブスケジューラの有無  
+   core : オーケストレーションツールが必要  
+   cloud : deploy機能でスケジューリング可能
+3. セマンティックレイヤーへの対応
+   ここ掘り下げちゃった  
+   
+   
+
+## 10.その他
 1. 3ヶ月1度バージョンアップが走る
-2. 
 
 
 ## 11.今回の検証で参考にしたドキュメント
@@ -301,3 +317,9 @@ cloud : deploy機能でスケジューリング可能
 
 9. [dbt Coreとdbt Cloudの関係性・違いなどについてまとめてみた](https://dev.classmethod.jp/articles/differences-between-dbt-core-and-dbt-cloud/)  
    clasmethod
+
+10. [セマンティックレイヤー / Headless BIとは](https://zenn.dev/churadata/articles/e779a733c5fb35?__hstc=53729015.24b4c65795e04a12854d307aff52180e.1727241601526.1728373158207.1728375697266.22&__hssc=53729015.1.1728375697266&__hsfp=4192984096)  
+   Zenn : 菱沼 雄太さん
+
+11. [dbt Semantic Layer ( MetricFlow ) の理解を深める](https://speakerdeck.com/tanuuuuuuu/dbt-semantic-layer-metricflow-noli-jie-woshen-meru?slide=11)  
+   著者 : ??
